@@ -11,12 +11,12 @@ DATABASES = {'default': dj_database_url.config(default='postgres:///travellog')}
 DEBUG = 'DJANGO_DEBUG' in os.environ
 LANGUAGE_CODE = 'en-us'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', secrets.token_bytes())
-STATIC_URL = '/static/'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 WSGI_APPLICATION = 'travellog.wsgi.application'
+MAPBOX_TOKEN = "pk.eyJ1IjoiamFjb2JrYXBsYW5tb3NzIiwiYSI6ImNqYnNjbGRrcDB0MmIyd21rbXRzc3V0b3YifQ.4Kz9dKc86l528aaoiegTqA"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'travellog',
 ]
 
 MIDDLEWARE = [
@@ -53,4 +54,9 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    HERE.parent / 'laurenhallden-travellog'
 ]
