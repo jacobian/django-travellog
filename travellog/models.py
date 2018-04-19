@@ -32,7 +32,7 @@ class Section(models.Model):
         order_with_respect_to = 'travellog'
 
     def __str__(self):
-        return self.title
+        return f'{self.title} ({self.travellog.title})'
 
 class Location(models.Model):
     """

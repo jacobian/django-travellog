@@ -5,8 +5,8 @@
   <meta charset="utf-8">
 
   <title>Travel Log</title>
-  <meta name="description" content="An interactive map of everywhere I traveled this year.">
-  <meta name="author" content="Lauren Hallden">
+  <meta name="description" content="FIXME - An interactive map of everywhere I traveled this year.">
+  <meta name="author" content="FIXME - Lauren Hallden">
 
   <link rel="apple-touch-icon" sizes="57x57" href="{% static "images/icons/apple-icon-57x57.png" %}">
   <link rel="apple-touch-icon" sizes="60x60" href="{% static "images/icons/apple-icon-60x60.png" %}">
@@ -26,7 +26,7 @@
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <!-- Metatags -->
+  <!-- Metatags FIXME all the below-->
   <meta property="og:title" content="Travel Log" />
   <meta property="og:url" content="your_url_here" />
   <meta property="og:type" content="website" />
@@ -66,60 +66,32 @@
     <div id="writing"> <!-- and this is where all the writing and pictures go -->
 
       <section id="intro" class='active'>
-        <h1>My Travel Log: 2017</h1>
-        <p>Say a little something about why you were traveling!</p>
+        <h1>{{ travellog.title }}</h1>
+        <p>{{ travellog.text }} {# FIXME: markdown #}</p>
       </section>
 
-      <div class="section">
-        <i class="mg map-us-pa"></i>
-        <h2>Pennsylvania</h2>
-      </div>
+      {% for section in travellog.sections.all %}
+        <div class="section">
+          <i class="mg {{ section.icon }}"></i>
+          <h2>{{ section.title }}</h2>
+        </div>
+        {% for location in section.locations.all %}
+          <section id='location-{{ location.id }}'>{# FIXME: slug for better URLs? #}
+            <h3>{{ location.title }}</h3>
+            <p>{{ location.text }} {# FIXME: markdown #}</p>
+            {% if location.date %}<span class="date">{{ location.date }}</span>{% endif %}
+            <div class="grid">
+              {% for photo in location.photos.all %}
+                <div class="box box--{{ photo.size }}">
+                  <div  class="image-wrapper" style="background-image: url({{ photo.photo.url  }})"></div>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endfor %}
+      {% endfor %}
 
-      <section id='location-one'>
-        <h3>Location One</h3>
-        <p>This place was pretty great.</p>
-        <span class="date">Jan 1</span>
-
-        <div class="grid">
-          <div class="box box--2x2">
-            <div  class="image-wrapper" style="background-image: url({% static "images/image-3x1.jpg" %})"></div>
-          </div>
-          <div class="box box--1x1">
-            <div  class="image-wrapper" style="background-image: url({% static "images/image-2x1.jpg" %})"></div>
-          </div>
-          <div class="box box--1x1">
-            <div class="image-wrapper" style="background-image: url({% static "images/image-1x1.jpg" %})"></div>
-          </div>
-        </div><!-- end grid -->
-
-      </section>
-
-      <div class="section">
-        <i class="mg map-us-pa"></i>
-        <h2>Somewhere Else</h2>
-      </div>
-
-      <section id='location-two'>
-        <h3>Location Two</h3>
-        <p>But this place was even better.</p>
-        <span class="date">Jan 16</span>
-
-        <div class="grid">
-          <div class="box box--3x1">
-            <div class="image-wrapper" style="background-image: url({% static "images/image-3x1.jpg" %})"></div>
-          </div>
-          <div class="box box--2x1">
-            <div class="image-wrapper" style="background-image: url({% static "images/image-2x1.jpg" %})"></div>
-          </div>
-          <div class="box box--1x1">
-            <div class="image-wrapper" style="background-image: url({% static "images/image-1x1.jpg" %})"></div>
-          </div>
-        </div><!-- end grid -->
-
-      </section>
-
-
-      <!-- This is the end! -->
+      <!-- This is the end! -->{# FIXME fille this out #}
       <div class="section end">
         <h4 class="h2">The end</h4>
         <p>Travel Log designed by <a href="http://www.laurenhallden.com">Lauren Hallden</a>.</p>
@@ -142,7 +114,7 @@
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/outdoors-v10',
-      center: [-75.401710, 41.221494], // your starting coordiantes
+      center: [-75.401710, 41.221494], // FIXME starting coords
       zoom: 12.5,
       bearing: 35,
       pitch: 40,
@@ -151,23 +123,7 @@
 
     map.scrollZoom.disable();
 
-    var chapters = {
-
-      // give each location the same name as its section id, and set its coordinates here
-      'location-one': {
-        center: [-75.401710, 41.221494],
-          zoom: 12.5,
-          bearing: 35,
-          pitch: 40,
-          duration: 8000
-      },
-      'location-two': {
-          center: [-75.748217, 40.740883],
-          zoom: 11,
-          bearing: 55,
-          pitch: 70
-      }
-  };
+    var chapters = {{ chapters_json|safe }};
 
   // Every time the page scrolls, we'll check which section is on the screen
   $('#writing').scroll(function() {
