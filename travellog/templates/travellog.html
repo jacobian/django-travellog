@@ -123,7 +123,7 @@
 
     map.scrollZoom.disable();
 
-    var chapters = {{ chapters_json|safe }};
+    var chapters = {{ chapters_json|safe }}; {# fixme this is ugly; xhr? #}
 
   // Every time the page scrolls, we'll check which section is on the screen
   $('#writing').scroll(function() {
